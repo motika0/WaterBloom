@@ -1,0 +1,40 @@
+CREATE TABLE user (
+    id
+    password
+    login 
+    is_superuser
+    username
+    first_name 
+    last_name 
+    email 
+    date
+);
+
+CREATE TABLE plants_plant (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL,
+    photo VARCHAR(255),
+    watering_frequency INTEGER NOT NULL,
+    plant_type VARCHAR(50) NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE plants_favorite (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    plant_id INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    FOREIGN KEY (plant_id) REFERENCES plants_plant(id) ON DELETE CASCADE,
+    UNIQUE(user_id, plant_id)
+);
+
+CREATE TABLE plants_wateringlog (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    plant_id INTEGER NOT NULL,
+    watered_at DATE NOT NULL,
+    note VARCHAR(200),
+    FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    FOREIGN KEY (plant_id) REFERENCES plants_plant(id) ON DELETE CASCADE
+);
