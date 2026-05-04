@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if plant %}Редактировать{% else %}Добавить растение{% endif %}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>{% if plant %}Редактировать{% else %}Добавить растение{% endif %}</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            <label>Название растения</label>
+            <input type="text" name="name" value="{{ plant.name|default:'' }}" required placeholder="Например, Кактус">
+        </div>
+        
+        <div>
+            <label>Частота полива (дней)</label>
+            <input type="number" name="watering_frequency" value="{{ plant.watering_frequency|default:'' }}" required placeholder="3, 5, 7, 14...">
+        </div>
+        
+        <div>
+            <label>Тип растения</label>
+            <select name="plant_type">
+                <option value="cactus" {% if plant.plant_type == 'cactus' %}selected{% endif %}>Кактус</option>
+                <option value="succulent" {% if plant.plant_type == 'succulent' %}selected{% endif %}>Суккулент</option>
+                <option value="flowering" {% if plant.plant_type == 'flowering' %}selected{% endif %}>Цветущее</option>
+                <option value="leafy" {% if plant.plant_type == 'leafy' %}selected{% endif %}>Лиственное</option>
+            </select>
+        </div>
+        
+        <div>
+            <label>Дата последнего полива</label>
+            <input type="date" name="last_watered" value="{{ plant.last_watered|default:'' }}">
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button type="submit" class="btn">Сохранить</button>
+            <a href="/plants/" class="btn btn-outline">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

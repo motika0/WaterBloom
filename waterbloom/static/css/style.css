@@ -1,0 +1,159 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0f1f18;
+    font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
+    min-height: 100vh;
+    color: #e6f5e9;
+    line-height: 1.5;
+}
+
+.header {
+    background: #12281f;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #2f6f55;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #6fd39a;
+    letter-spacing: 1px;
+}
+
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: #b7e5c8;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+
+.container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+
+.plants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+
+.plant-card {
+    background: #18352a;
+    border: 1px solid #2f6f55;
+    border-radius: 16px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.plant-card:hover {
+    border-color: #5cbf8a;
+}
+
+
+.btn {
+    display: inline-block;
+    background: #2f7a57;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn:hover {
+    background: #3d9a70;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #5cbf8a;
+    color: #c8f0c0;
+}
+
+.btn-outline:hover {
+    background: #2f7a57;
+    color: white;
+}
+
+.btn-danger {
+    background: #8b3a2a;
+}
+
+.btn-danger:hover {
+    background: #a34a38;
+}
+
+
+.form-container {
+    background: #162f25;
+    border: 1px solid #2f6f55;
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 480px;
+    margin: 2rem auto;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border: 1px solid #3f8e66;
+    border-radius: 8px;
+    background: #f3f7f2;
+    font-size: 0.95rem;
+}
+
+label {
+    font-size: 0.9rem;
+    color: #c2e0b2;
+}
+
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button {
+    white-space: nowrap;
+}
+
+.plant-card * {
+    word-wrap: break-word;
+}

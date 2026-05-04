@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Все растения{% endblock %}
+
+{% block content %}
+<h1>Каталог растений</h1>
+
+<div class="plants-grid">
+    {% for plant in plants %}
+    <div class="plant-card">
+        <h2>{{ plant.name }}</h2>
+        <p>Полив: раз в {{ plant.watering_frequency }} дн.</p>
+        <p>{{ plant.get_plant_type_display }}</p>
+        <a href="/plants/{{ plant.id }}/" class="btn">Подробнее</a>
+    </div>
+    {% empty %}
+    <p style="text-align: center;">Растений пока нет...</p>
+    {% endfor %}
+</div>
+{% endblock %}

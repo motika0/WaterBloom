@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterBloom | {% block title %}Календарь полива{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="logo">WaterBloom</div>
+        <nav class="nav-links">
+            <a href="/">Главная</a>
+            <a href="/plants/">Растения</a>
+            {% if user.is_authenticated %}
+                <a href="/plant/add/">Добавить</a>
+                <a href="/profile/">Мой профиль</a>
+                <a href="/logout/">Выход ({{ user.username }})</a>
+            {% else %}
+                <a href="/login/">Вход</a>
+                <a href="/register/">Регистрация</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer style="text-align: center; padding: 2rem; margin-top: 2rem; color: #7aa874; font-size: 0.85rem; border-top: 1px solid #2a5e3f;">
+    WaterBloom — заботься о растениях с умом
+</footer>
+
+</body>
+</html>

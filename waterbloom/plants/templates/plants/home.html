@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 2rem 0 3rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Время заботы о растениях</h1>
+    <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;">WaterBloom поможет не забыть полить любимые цветы</p>
+    
+    {% if user.is_authenticated %}
+        <a href="/plants/" class="btn" style="margin-top: 2rem;">Мои растения →</a>
+    {% else %}
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+            <a href="/register/" class="btn">Начать</a>
+            <a href="/plants/" class="btn btn-outline">Посмотреть растения</a>
+        </div>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

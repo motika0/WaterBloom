@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+
+<h2 style="margin-top: 2rem;">Избранные растения</h2>
+<div class="plants-grid">
+    {% for fav in favorites %}
+    <div class="plant-card">
+        <h3>{{ fav.plant.name }}</h3>
+        <p>💧 Раз в {{ fav.plant.watering_frequency }} дн.</p>
+        <a href="/plants/{{ fav.plant.id }}/" class="btn">Перейти</a>
+    </div>
+    {% empty %}
+    <p>У вас пока нет избранных растений.</p>
+    {% endfor %}
+</div>
+
+<h2 style="margin-top: 2rem;">История поливов</h2>
+<ul style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 25px; list-style: none;">
+    {% for log in watering_logs %}
+    <li style="padding: 0.5rem 0;">полив{{ log.plant.name }} — {{ log.watered_at|date:"d.m.Y H:i" }}</li>
+    {% empty %}
+    <li>Нет записей о поливе</li>
+    {% endfor %}
+</ul>
+{% endblock %}
