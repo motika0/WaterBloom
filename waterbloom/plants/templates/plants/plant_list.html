@@ -5,16 +5,55 @@
 {% block content %}
 <h1>Каталог растений</h1>
 
+<form method="get" style="margin: 1.5rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+
+    <input type="text" name="search" placeholder="Поиск..." value="{{ request.GET.search }}">
+
+    <select name="type">
+        <option value="">Все типы</option>
+        <option value="leafy">Лиственные</option>
+        <option value="flowering">Цветущие</option>
+        <option value="succulent">Суккуленты</option>
+        <option value="ampel">Ампельные</option>
+    </select>
+
+    <select name="sort">
+        <option value="">Без сортировки</option>
+        <option value="name">По названию</option>
+        <option value="watering">По поливу</option>
+    </select>
+
+    <button class="btn">Применить</button>
+</form>
+
 <div class="plants-grid">
     {% for plant in plants %}
     <div class="plant-card">
+
         <h2>{{ plant.name }}</h2>
+
         <p>Полив: раз в {{ plant.watering_frequency }} дн.</p>
         <p>{{ plant.get_plant_type_display }}</p>
+
         <a href="/plants/{{ plant.id }}/" class="btn">Подробнее</a>
+
+        {% if user.is_authenticated %}
+        <form method="post" action="/plant/{{ plant.id }}/favorite/" style="margin-top: 0.5rem;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline">
+                {% if plant.id in favorites %}
+                    В избранном 
+                {% else %}
+                    В избранное нету
+                {% endif %}
+            </button>
+        </form>
+        {% endif %}
+
     </div>
     {% empty %}
     <p style="text-align: center;">Растений пока нет...</p>
     {% endfor %}
 </div>
+
 {% endblock %}

@@ -8,5 +8,7 @@ urlpatterns = [
     path('plant/add/', views.plant_add, name='plant_add'),
     path('plant/<int:pk>/edit/', views.plant_edit, name='plant_edit'),
     path('plant/<int:pk>/delete/', views.plant_delete, name='plant_delete'),
+    path('plant/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('profile/', views.profile, name='profile'),
+
 ]

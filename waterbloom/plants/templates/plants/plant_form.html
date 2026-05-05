@@ -29,11 +29,6 @@
             </select>
         </div>
         
-        <div>
-            <label>Дата последнего полива</label>
-            <input type="date" name="last_watered" value="{{ plant.last_watered|default:'' }}">
-        </div>
-        
         <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
             <button type="submit" class="btn">Сохранить</button>
             <a href="/plants/" class="btn btn-outline">Отмена</a>

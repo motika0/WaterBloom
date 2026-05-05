@@ -8,7 +8,7 @@
     <p style="font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto;">WaterBloom поможет не забыть полить любимые цветы</p>
     
     {% if user.is_authenticated %}
-        <a href="/plants/" class="btn" style="margin-top: 2rem;">Мои растения →</a>
+        <a href="/plants/" class="btn" style="margin-top: 2rem;">Посмотреть растения</a>
     {% else %}
         <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
             <a href="/register/" class="btn">Начать</a>

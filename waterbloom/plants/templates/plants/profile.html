@@ -10,7 +10,7 @@
     {% for fav in favorites %}
     <div class="plant-card">
         <h3>{{ fav.plant.name }}</h3>
-        <p>💧 Раз в {{ fav.plant.watering_frequency }} дн.</p>
+        <p>Раз в {{ fav.plant.watering_frequency }} дн.</p>
         <a href="/plants/{{ fav.plant.id }}/" class="btn">Перейти</a>
     </div>
     {% empty %}
