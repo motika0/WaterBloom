@@ -157,3 +157,104 @@ button {
 .plant-card * {
     word-wrap: break-word;
 }
+  .calendar-container {
+        background: rgba(0,0,0,0.2);
+        padding: 15px;
+        border-radius: 16px;
+    }
+    
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 0 10px;
+    }
+    
+    .calendar-nav {
+        background: #2f7a57;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 5px 12px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    
+    .calendar-nav:hover {
+        background: #3d9a70;
+    }
+    
+    .calendar-weekdays {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+    
+    .calendar-weekday {
+        text-align: center;
+        padding: 8px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        opacity: 0.8;
+    }
+    
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+    }
+    
+    .calendar-day {
+        text-align: center;
+        padding: 10px 5px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+        background: rgba(255,255,255,0.05);
+    }
+    
+    .calendar-day:hover {
+        background: rgba(79, 195, 118, 0.3);
+    }
+    
+    .calendar-day.other-month {
+        opacity: 0.3;
+    }
+    
+    .calendar-day.watered {
+        background: #2196f3;
+        color: white;
+        position: relative;
+    }
+    
+    .calendar-day.today {
+        border: 2px solid #ffc107;
+        font-weight: bold;
+    }
+    
+    .history-list {
+        max-height: 300px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+    
+    .history-item {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 0.85rem;
+    }
+    
+    .plant-detail-link {
+        display: inline-block;
+        margin-top: 10px;
+        color: #6fd39a;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+    
+    .plant-detail-link:hover {
+        text-decoration: underline;
+    }

@@ -1,59 +1,80 @@
 {% extends 'base.html' %}
 
-{% block title %}Все растения{% endblock %}
+{% block title %}Мои растения{% endblock %}
 
 {% block content %}
-<h1>Каталог растений</h1>
+<h1 class="mb-4">Мои растения</h1>
 
-<form method="get" style="margin: 1.5rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+<div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 16px; margin-bottom: 2rem;">
+    <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="text" name="search" placeholder="Поиск по названию"
+               value="{{ request.GET.search }}" style="flex: 2;">
 
-    <input type="text" name="search" placeholder="Поиск..." value="{{ request.GET.search }}">
+        <select name="type" style="flex: 1;">
+            <option value="">Все типы</option>
+            <option value="leafy" {% if request.GET.type == 'leafy' %}selected{% endif %}>Декоративно-лиственное</option>
+            <option value="flowering" {% if request.GET.type == 'flowering' %}selected{% endif %}>Цветущее</option>
+            <option value="succulent" {% if request.GET.type == 'succulent' %}selected{% endif %}>Суккулент</option>
+            <option value="ampel" {% if request.GET.type == 'ampel' %}selected{% endif %}>Ампельное</option>
+        </select>
 
-    <select name="type">
-        <option value="">Все типы</option>
-        <option value="leafy">Лиственные</option>
-        <option value="flowering">Цветущие</option>
-        <option value="succulent">Суккуленты</option>
-        <option value="ampel">Ампельные</option>
-    </select>
+        <select name="sort" style="flex: 1;">
+            <option value="">Без сортировки</option>
+            <option value="name" {% if request.GET.sort == 'name' %}selected{% endif %}>По названию</option>
+            <option value="watering" {% if request.GET.sort == 'watering' %}selected{% endif %}>По частоте полива</option>
+        </select>
 
-    <select name="sort">
-        <option value="">Без сортировки</option>
-        <option value="name">По названию</option>
-        <option value="watering">По поливу</option>
-    </select>
+        <button type="submit" class="btn">Применить</button>
+        <a href="{% url 'plant_list' %}" class="btn btn-outline">Сбросить</a>
+    </form>
+</div>
 
-    <button class="btn">Применить</button>
-</form>
-
-<div class="plants-grid">
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
     {% for plant in plants %}
-    <div class="plant-card">
+    <div class="plant-card" style="display: flex; flex-direction: column;">
 
-        <h2>{{ plant.name }}</h2>
+        <div style="width: 100%; height: 200px; overflow: hidden; border-radius: 12px; margin-bottom: 1rem; background: #2a4a3a;">
+            {% if plant.image %}
+                <img src="{{ plant.image.url }}" alt="{{ plant.name }}"
+                     style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 64px;">
+                    фото
+                </div>
+            {% endif %}
+        </div>
 
-        <p>Полив: раз в {{ plant.watering_frequency }} дн.</p>
-        <p>{{ plant.get_plant_type_display }}</p>
+        <h3 style="margin: 0 0 0.5rem 0;">{{ plant.name }}</h3>
 
-        <a href="/plants/{{ plant.id }}/" class="btn">Подробнее</a>
+        <p style="margin: 0.3rem 0;">Полив раз в {{ plant.watering_frequency }} дн.</p>
+        <p style="margin: 0.3rem 0;">{{ plant.get_plant_type_display }}</p>
 
-        {% if user.is_authenticated %}
-        <form method="post" action="/plant/{{ plant.id }}/favorite/" style="margin-top: 0.5rem;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline">
-                {% if plant.id in favorites %}
-                    В избранном 
-                {% else %}
-                    В избранное нету
-                {% endif %}
-            </button>
-        </form>
-        {% endif %}
+        <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 1rem;">
+            <a href="{% url 'plant_detail' plant.id %}" class="btn" style="flex: 2;">Подробнее</a>
+
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'toggle_favorite' plant.id %}" style="flex: 1;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn {% if plant.id in favorites %}btn-warning{% else %}btn-outline{% endif %}"
+                            style="width: 100%;">
+                        {% if plant.id in favorites %}в избранное{% else %}в избранном{% endif %}
+                    </button>
+                </form>
+            {% endif %}
+        </div>
 
     </div>
     {% empty %}
-    <p style="text-align: center;">Растений пока нет...</p>
+    <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+        <p>Растения не найдены</p>
+        <a href="{% url 'plant_add' %}" class="btn">Добавить первое растение</a>
+    </div>
     {% endfor %}
 </div>
 
+{% if user.is_authenticated %}
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{% url 'plant_add' %}" class="btn">Добавить растение</a>
+    </div>
+{% endif %}
 {% endblock %}

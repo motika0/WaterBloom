@@ -3,18 +3,74 @@
 {% block title %}{{ plant.name }}{% endblock %}
 
 {% block content %}
-<div class="plant-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
-    <h1 style="font-size: 2rem;">{{ plant.name }}</h1>
-    <p style="font-size: 1.2rem; margin: 1rem 0;"> Поливать раз в <strong>{{ plant.watering_frequency }}</strong> дней</p>
-    <p>Тип: {{ plant.get_plant_type_display }}</p>
-    
-    {% if user.is_authenticated %}
-    <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
-        <a href="/plant/{{ plant.id }}/edit/" class="btn btn-outline">Редактировать</a>
-        <a href="/plant/{{ plant.id }}/delete/" class="btn btn-danger">Удалить</a>
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="plant-card" style="padding: 2rem;">
+
+        <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+
+            <div style="flex: 1; min-width: 250px;">
+                <div style="width: 100%; max-width: 400px; margin: 0 auto; background: #2a4a3a; border-radius: 16px; overflow: hidden;">
+                    {% if plant.image %}
+                        <img src="{{ plant.image.url }}" alt="{{ plant.name }}"
+                             style="width: 100%; height: auto; display: block;">
+                    {% else %}
+                        <div style="width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; font-size: 80px;">
+                            фото
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if user.is_authenticated %}
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="{% url 'plant_edit' plant.id %}" class="btn btn-outline" style="font-size: 0.85rem;">Изменить фото</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div style="flex: 1;">
+                <h1 style="margin-top: 0;">{{ plant.name }}</h1>
+
+                <p style="font-size: 1.2rem;">Поливать раз в <strong>{{ plant.watering_frequency }}</strong> дней</p>
+                <p>Тип: <strong>{{ plant.get_plant_type_display }}</strong></p>
+
+                {% if plant.last_watered %}
+                    <p>Последний полив: <strong>{{ plant.last_watered|date:"d.m.Y" }}</strong></p>
+                {% else %}
+                    <p>Последний полив: <strong>не указан</strong></p>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'toggle_favorite' plant.id %}" style="margin: 1.5rem 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn {% if plant.id in favorites %}btn-warning{% else %}btn-outline{% endif %}">
+                            {% if plant.id in favorites %}
+                                В избранном
+                            {% else %}
+                                В избранное
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a href="{% url 'plant_edit' plant.id %}" class="btn btn-outline">Редактировать</a>
+
+                        <form method="post" action="{% url 'plant_delete' plant.id %}" style="display: inline;"
+                              onsubmit="return confirm('Удалить {{ plant.name }}?')">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{% url 'plant_list' %}" class="btn btn-outline">Назад к списку</a>
+        </div>
+
     </div>
-    {% endif %}
-    
-    <a href="/plants/" class="btn btn-outline" style="margin-top: 1rem;">← Назад к списку</a>
 </div>
 {% endblock %}

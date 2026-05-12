@@ -7,7 +7,6 @@ class PlantType(models.TextChoices):
     SUCCULENT = 'succulent', 'Суккулент'
     AMPEL = 'ampel', 'Ампельное/лиана'
 
-
 class Plant(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название растения")
     watering_frequency = models.IntegerField(verbose_name="Частота полива (дней)")
@@ -18,10 +17,10 @@ class Plant(models.Model):
         default=PlantType.LEAFY,
         verbose_name="Тип растения"
     )
+    image = models.ImageField(upload_to='plants/', null=True, blank=True, verbose_name="Фото растения")
     
     def __str__(self):
         return self.name
-
 
 class WateringLog(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE, verbose_name="Растение")
@@ -30,7 +29,6 @@ class WateringLog(models.Model):
     
     def __str__(self):
         return f"{self.plant.name} — {self.watered_at.strftime('%d.%m.%Y')}"
-
 
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")

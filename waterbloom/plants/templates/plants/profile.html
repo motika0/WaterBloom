@@ -1,29 +1,74 @@
 {% extends 'base.html' %}
 
-{% block title %}Мой профиль{% endblock %}
+{% block title %}Мои растения{% endblock %}
 
 {% block content %}
-<h1>{{ user.username }}</h1>
+<h1>Мои растения</h1>
+<p style="margin-bottom: 2rem;">Отмечайте поливы ваших избранных растений</p>
 
-<h2 style="margin-top: 2rem;">Избранные растения</h2>
-<div class="plants-grid">
-    {% for fav in favorites %}
-    <div class="plant-card">
-        <h3>{{ fav.plant.name }}</h3>
-        <p>Раз в {{ fav.plant.watering_frequency }} дн.</p>
-        <a href="/plants/{{ fav.plant.id }}/" class="btn">Перейти</a>
+<div style="display: flex; flex-direction: column; gap: 2rem;">
+    {% for item in favorites_data %}
+    <div class="plant-card" style="padding: 1.5rem;" data-plant-id="{{ item.plant.id }}">
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+            
+            <div style="width: 120px; text-align: center;">
+                <div style="width: 120px; height: 120px; background: #2a4a3a; border-radius: 12px; overflow: hidden; margin: 0 auto;">
+                    {% if item.plant.image %}
+                        <img src="{{ item.plant.image.url }}" alt="{{ item.plant.name }}"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 48px;">
+                            фото
+                        </div>
+                    {% endif %}
+                </div>
+                <h3 style="margin: 0.5rem 0;">{{ item.plant.name }}</h3>
+                <p style="font-size: 0.8rem;">Полив раз в {{ item.plant.watering_frequency }} дн.</p>
+                <p style="font-size: 0.8rem;">Всего поливов: {{ item.total_waterings }}</p>
+                <a href="{% url 'plant_detail' item.plant.id %}" style="color: #6fd39a; text-decoration: none; font-size: 0.85rem;">Подробнее →</a>
+            </div>
+            
+            <div style="flex: 2; min-width: 250px;">
+                <form method="post" action="{% url 'water_plant_toggle' %}" class="water-form" data-plant-id="{{ item.plant.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="plant_id" value="{{ item.plant.id }}">
+                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <input type="date" name="water_date" value="{{ today|date:'Y-m-d' }}" 
+                               style="flex: 2; margin-bottom: 0;">
+                        <button type="submit" class="btn" style="background: #4caf50; white-space: nowrap;">
+                            Отметить полив
+                        </button>
+                    </div>
+                    <small style="display: block; margin-top: 0.5rem; opacity: 0.7;">
+                        Выберите дату и нажмите кнопку
+                    </small>
+                </form>
+            </div>
+            
+            <div style="flex: 1; min-width: 200px;">
+                <h4 style="margin: 0 0 0.5rem 0;">История поливов</h4>
+                <div class="history-list" style="max-height: 200px; overflow-y: auto; padding-right: 10px;">
+                    {% for log in item.watering_history %}
+                    <div style="padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem;">
+                         {{ log.watered_at|date:"d.m.Y H:i" }}
+                    </div>
+                    {% empty %}
+                    <div style="opacity: 0.7; padding: 5px 0;">
+                        Пока нет поливов
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+        
     </div>
     {% empty %}
-    <p>У вас пока нет избранных растений.</p>
+    <div class="plant-card" style="text-align: center; padding: 3rem;">
+        <p>У вас пока нет избранных растений</p>
+        <a href="{% url 'plant_list' %}" class="btn">Добавить растения в избранное</a>
+    </div>
     {% endfor %}
 </div>
-
-<h2 style="margin-top: 2rem;">История поливов</h2>
-<ul style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 25px; list-style: none;">
-    {% for log in watering_logs %}
-    <li style="padding: 0.5rem 0;">полив{{ log.plant.name }} — {{ log.watered_at|date:"d.m.Y H:i" }}</li>
-    {% empty %}
-    <li>Нет записей о поливе</li>
-    {% endfor %}
-</ul>
 {% endblock %}

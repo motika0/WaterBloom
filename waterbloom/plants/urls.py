@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -9,6 +11,9 @@ urlpatterns = [
     path('plant/<int:pk>/edit/', views.plant_edit, name='plant_edit'),
     path('plant/<int:pk>/delete/', views.plant_delete, name='plant_delete'),
     path('plant/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('water-plant/', views.water_plant_toggle, name='water_plant_toggle'),
     path('profile/', views.profile, name='profile'),
-
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
