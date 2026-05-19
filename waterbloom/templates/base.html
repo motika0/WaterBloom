@@ -1,41 +1,86 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WaterBloom | {% block title %}Календарь полива{% endblock %}</title>
-    {% load static %}
+    <title>{% block title %}WaterBloom{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-
-<header class="header">
-    <div class="header-content">
-        <div class="logo">WaterBloom</div>
-        <nav class="nav-links">
-            <a href="/">Главная</a>
-            <a href="/plants/">Растения</a>
-            {% if user.is_authenticated %}
-                <a href="/plant/add/">Добавить</a>
-                <a href="/profile/">Мой профиль</a>
-                <a href="/logout/">Выход ({{ user.username }})</a>
-            {% else %}
-                <a href="/login/">Вход</a>
-                <a href="/register/">Регистрация</a>
-            {% endif %}
-        </nav>
+    <div class="header">
+        <div class="header-content">
+            <a href="{% url 'home' %}" class="logo">WaterBloom</a>
+            <div class="nav-links">
+                <a href="{% url 'plant_list' %}">Растения</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">Мои растения</a>
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: none; color: #b7e5c8; cursor: pointer; font-size: 0.95rem;">Выйти ({{ user.username }})</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
     </div>
-</header>
 
-<main class="container">
-    {% block content %}
-    {% endblock %}
-</main>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
 
-<footer style="text-align: center; padding: 2rem; margin-top: 2rem; color: #7aa874; font-size: 0.85rem; border-top: 1px solid #2a5e3f;">
-    WaterBloom — заботься о растениях с умом
-</footer>
+    {% if user.is_authenticated and notifications %}
+    <button class="notification-btn" id="notificationBtn" style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: #2f7a57; border: none; color: white; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000;">
+        🔔
+        {% if notifications|length > 0 %}
+            <span style="position: absolute; top: -5px; right: -5px; background: #ff4444; color: white; font-size: 12px; padding: 2px 6px; border-radius: 50%;">{{ notifications|length }}</span>
+        {% endif %}
+    </button>
+    <div id="notificationPanel" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 350px; background: #18352a; border: 1px solid #2f6f55; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); z-index: 999; max-height: 400px; overflow-y: auto;">
+        <div style="padding: 15px; border-bottom: 1px solid #2f6f55; font-weight: bold;">Уведомления о поливе</div>
+        {% for notif in notifications %}
+            <div style="padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); {% if notif.days_left <= 0 %}background: rgba(255,68,68,0.2);{% elif notif.days_left <= 1 %}background: rgba(255,152,0,0.2);{% endif %}">
+                <div style="font-weight: bold;">{{ notif.plant.name }}</div>
+                <div style="font-size: 0.85rem;">
+                    {% if notif.days_left <= 0 %}
+                        Срочно! Нужно полить сегодня
+                    {% elif notif.days_left == 1 %}
+                        Нужно полить завтра
+                    {% else %}
+                        Нужно полить через {{ notif.days_left }} дня
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
+    <script>
+        var notificationBtn = document.getElementById('notificationBtn');
+        var notificationPanel = document.getElementById('notificationPanel');
+        
+        if (notificationBtn) {
+            notificationBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (notificationPanel.style.display === 'none' || notificationPanel.style.display === '') {
+                    notificationPanel.style.display = 'block';
+                } else {
+                    notificationPanel.style.display = 'none';
+                }
+            });
+            
+            document.addEventListener('click', function() {
+                notificationPanel.style.display = 'none';
+            });
+            
+            notificationPanel.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

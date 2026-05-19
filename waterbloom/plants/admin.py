@@ -9,8 +9,9 @@ class PlantAdmin(admin.ModelAdmin):
 
 @admin.register(WateringLog)
 class WateringLogAdmin(admin.ModelAdmin):
-    list_display = ('plant', 'user', 'watered_at')
-    list_filter = ('watered_at',)
+    list_display = ('plant', 'user', 'watered_at', 'created_at')
+    list_filter = ('watered_at', 'created_at')
+    search_fields = ('plant__name', 'user__username')
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):

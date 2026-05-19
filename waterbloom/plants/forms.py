@@ -1,18 +1,17 @@
 from django import forms
-from .models import Plant
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
-class PlantForm(forms.ModelForm):
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, label="Электронная почта")
+    
     class Meta:
-        model = Plant
-        fields = ['name', 'watering_frequency', 'plant_type', 'last_watered']
-        widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Например, Кактус'}),
-            'watering_frequency': forms.NumberInput(attrs={'placeholder': 'Через сколько дней поливать'}),
-            'last_watered': forms.DateInput(attrs={'type': 'date'}),
-        }
-        labels = {
-            'name': 'Название растения',
-            'watering_frequency': 'Частота полива (дней)',
-            'plant_type': 'Тип растения',
-            'last_watered': 'Дата последнего полива',
-        }
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user

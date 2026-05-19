@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 400px;">
+    <h2 style="text-align: center;">Вход в систему</h2>
+    
+    {% if form.errors %}
+        <div style="background: rgba(255,68,68,0.2); border: 1px solid #ff4444; padding: 10px; border-radius: 8px; margin-bottom: 1rem;">
+            Неправильное имя пользователя или пароль. Попробуйте снова.
+        </div>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <label>Имя пользователя:</label>
+        <input type="text" name="username" required autofocus>
+        
+        <label>Пароль:</label>
+        <input type="password" name="password" required>
+        
+        <input type="hidden" name="next" value="{{ next }}">
+        
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button type="submit" class="btn">Войти</button>
+            <a href="{% url 'register' %}" class="btn btn-outline">Регистрация</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

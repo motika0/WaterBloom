@@ -13,6 +13,7 @@ urlpatterns = [
     path('plant/<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('water-plant/', views.water_plant_toggle, name='water_plant_toggle'),
     path('profile/', views.profile, name='profile'),
+    path('register/', views.register, name='register'),
 ]
 
 if settings.DEBUG:

@@ -28,6 +28,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .logo {
@@ -35,13 +36,14 @@ body {
     font-weight: 700;
     color: #6fd39a;
     letter-spacing: 1px;
+    text-decoration: none;
 }
-
 
 .nav-links {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .nav-links a {
@@ -54,6 +56,115 @@ body {
     text-decoration: underline;
 }
 
+.nav-links form button {
+    background: none;
+    border: none;
+    color: #b7e5c8;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.nav-links form button:hover {
+    text-decoration: underline;
+}
+
+.notification-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #2f7a57;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.notification-btn:hover {
+    background: #3d9a70;
+    transform: scale(1.05);
+}
+
+.notification-btn.has-notif {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(79, 195, 118, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(79, 195, 118, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 195, 118, 0); }
+}
+
+.notification-panel {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;
+    background: #18352a;
+    border: 1px solid #2f6f55;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    z-index: 999;
+    display: none;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-panel.show {
+    display: block;
+}
+
+.notification-header {
+    padding: 15px;
+    border-bottom: 1px solid #2f6f55;
+    font-weight: bold;
+    font-size: 1.1rem;
+    position: sticky;
+    top: 0;
+    background: #18352a;
+}
+
+.notification-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: rgba(79, 195, 118, 0.1);
+}
+
+.notification-item.urgent {
+    background: rgba(255, 68, 68, 0.2);
+    border-left: 3px solid #ff4444;
+}
+
+.notification-item.warning {
+    background: rgba(255, 152, 0, 0.2);
+    border-left: 3px solid #ff9800;
+}
+
+.notification-plant-name {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.notification-message {
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.no-notifications {
+    padding: 30px;
+    text-align: center;
+    opacity: 0.7;
+}
 
 .container {
     max-width: 1100px;
@@ -61,13 +172,11 @@ body {
     padding: 0 1rem;
 }
 
-
 .plants-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
 }
-
 
 .plant-card {
     background: #18352a;
@@ -81,8 +190,8 @@ body {
 
 .plant-card:hover {
     border-color: #5cbf8a;
+    transform: translateY(-2px);
 }
-
 
 .btn {
     display: inline-block;
@@ -93,6 +202,9 @@ body {
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    text-align: center;
 }
 
 .btn:hover {
@@ -118,6 +230,31 @@ body {
     background: #a34a38;
 }
 
+.btn-warning {
+    background: #ffc107;
+    color: #1a2a1f;
+}
+
+.btn-warning:hover {
+    background: #ffca2c;
+}
+
+.btn-water {
+    background: #4caf50;
+}
+
+.btn-water:hover {
+    background: #45a049;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-small {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+}
 
 .form-container {
     background: #162f25;
@@ -139,10 +276,11 @@ input, select, textarea {
 }
 
 label {
+    display: block;
+    margin-bottom: 0.3rem;
     font-size: 0.9rem;
     color: #c2e0b2;
 }
-
 
 img {
     max-width: 100%;
@@ -157,104 +295,249 @@ button {
 .plant-card * {
     word-wrap: break-word;
 }
-  .calendar-container {
-        background: rgba(0,0,0,0.2);
-        padding: 15px;
-        border-radius: 16px;
+
+.detail-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.detail-card {
+    background: #18352a;
+    border: 1px solid #2f6f55;
+    border-radius: 24px;
+    padding: 2rem;
+}
+
+.detail-flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.detail-image-col {
+    flex: 1.2;
+    min-width: 280px;
+}
+
+.detail-image-wrapper {
+    width: 100%;
+    max-width: 100%;
+    background: #2a4a3a;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+}
+
+.detail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.detail-no-image {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #8bb5a0;
+}
+
+.detail-edit-photo {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.detail-info-col {
+    flex: 1;
+    min-width: 280px;
+}
+
+.detail-title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: #6fd39a;
+}
+
+.detail-watering-info {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.detail-plant-type {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.warning-text {
+    color: #ff9800;
+    font-weight: bold;
+    padding: 0.5rem 0;
+}
+
+.detail-button-group {
+    display: flex;
+    gap: 0.8rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+
+.detail-form {
+    flex: 1;
+    min-width: 140px;
+}
+
+.detail-calendar-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.detail-calendar-section h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: #6fd39a;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+}
+
+.calendar-card {
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.calendar-card:hover {
+    transform: translateY(-3px);
+}
+
+.card-watered {
+    background: #2196f3;
+}
+
+.card-past {
+    background: #ff9800;
+}
+
+.card-upcoming {
+    background: #4caf50;
+}
+
+.card-today {
+    border: 3px solid #ffc107;
+    transform: scale(1.02);
+}
+
+.calendar-date {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.calendar-status {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.calendar-weekday {
+    font-size: 0.7rem;
+    margin-top: 0.3rem;
+    opacity: 0.8;
+}
+
+.detail-back-link {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.water-form {
+    background: rgba(0,0,0,0.2);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.water-form-inline {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.water-form-inline input {
+    margin-bottom: 0;
+    flex: 2;
+    min-width: 150px;
+}
+
+.history-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.history-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.85rem;
+}
+
+.plant-detail-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #6fd39a;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.plant-detail-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .detail-card {
+        padding: 1.2rem;
     }
     
-    .calendar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        padding: 0 10px;
+    .detail-title {
+        font-size: 1.6rem;
     }
     
-    .calendar-nav {
-        background: #2f7a57;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 5px 12px;
-        cursor: pointer;
-        font-size: 16px;
+    .detail-button-group {
+        flex-direction: column;
     }
     
-    .calendar-nav:hover {
-        background: #3d9a70;
-    }
-    
-    .calendar-weekdays {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 5px;
-        margin-bottom: 8px;
-    }
-    
-    .calendar-weekday {
-        text-align: center;
-        padding: 8px;
-        font-weight: bold;
-        font-size: 0.85rem;
-        opacity: 0.8;
+    .detail-form {
+        min-width: auto;
     }
     
     .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 5px;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.8rem;
     }
     
-    .calendar-day {
-        text-align: center;
-        padding: 10px 5px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-size: 0.9rem;
-        background: rgba(255,255,255,0.05);
+    .water-form-inline {
+        flex-direction: column;
     }
     
-    .calendar-day:hover {
-        background: rgba(79, 195, 118, 0.3);
+    .water-form-inline input {
+        width: 100%;
     }
     
-    .calendar-day.other-month {
-        opacity: 0.3;
+    .water-form-inline button {
+        width: 100%;
     }
-    
-    .calendar-day.watered {
-        background: #2196f3;
-        color: white;
-        position: relative;
-    }
-    
-    .calendar-day.today {
-        border: 2px solid #ffc107;
-        font-weight: bold;
-    }
-    
-    .history-list {
-        max-height: 300px;
-        overflow-y: auto;
-        padding-right: 10px;
-    }
-    
-    .history-item {
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        font-size: 0.85rem;
-    }
-    
-    .plant-detail-link {
-        display: inline-block;
-        margin-top: 10px;
-        color: #6fd39a;
-        text-decoration: none;
-        font-size: 0.85rem;
-    }
-    
-    .plant-detail-link:hover {
-        text-decoration: underline;
-    }
+}

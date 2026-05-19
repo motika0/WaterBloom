@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="form-container" style="max-width: 400px;">
+    <h2 style="text-align: center;">Регистрация</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div style="color: #ff8888; font-size: 0.8rem;">{{ field.errors }}</div>
+            {% endif %}
+        {% endfor %}
+        
+        <button type="submit" class="btn" style="width: 100%;">Зарегистрироваться</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 1rem;">
+        Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+    </p>
+</div>
+{% endblock %}
